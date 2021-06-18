@@ -5,15 +5,15 @@
 
       <span>Silas</span>
 
-      <ion-button color="light" fill="clear" size="small">
-        <ion-icon slot="icon-only" name="arrow-down-outline"></ion-icon>
+      <ion-button (click)="toggleBlocks()" color="light" fill="clear" size="small">
+        <ion-icon slot="icon-only" [name]="initialStep > 0 ? 'arrow-up-outline' : 'arrow-down-outline'"></ion-icon>
       </ion-button>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" color="primary">
-  <div class="background">
+<ion-content class="ion-padding" color="primary" [scrollY]="!swiping">
+  <div #background class="background opacity-transition">
     <div class="bank-information ion-text-center">
       <img class="qrcode" src="/assets/qrcode.svg">
 
@@ -36,10 +36,10 @@
     </ion-button>
   </div>
 
-  <div class="blocks">
+  <div #blocks class="blocks" [ngClass]="fixedBlocks() ? 'fixed' : null">
     <!-- Card1 -->
     <ion-card>
-      <ion-item class="ion-margin-vertical" lines="none">
+      <ion-item #swipeDown class="ion-margin-vertical" lines="none">
         <ion-icon slot="start" name="card-outline"></ion-icon>
         <ion-label>Catão de Credito</ion-label>
       </ion-item>
@@ -89,11 +89,10 @@
       </ion-card-content>
     </ion-card>
 
-
     <!-- card3 -->
     <ion-card>
-      <ion-card-content class="ion-no-padding">
-        <ion-icon slot="gift" name="gift-outline"></ion-icon>
+      <ion-card-content class="ion-text-center">
+        <ion-icon class="gift" name="gift-outline"></ion-icon>
 
         <div class="ion-margin-vertical">
           <ion-text color="dark">
@@ -104,8 +103,9 @@
             <p>Acumule pontos que nunca expiram e troque por passagens aéreas ou serviços que você realmente usa.</p>
           </ion-text>
         </div>
-        <ion-button (click)="onClick()" expand="block" fill="clear" shape="round">
-          Click me
+
+        <ion-button expand="block" fill="outline">
+          <strong>ATIVE O SEU REWARDS</strong>
         </ion-button>
 
       </ion-card-content>
@@ -114,9 +114,9 @@
   </div>
 </ion-content>
 
-<ion-footer class="ion-no-border">
-  <ion-toolbar color="primary">
-    <ion-slides [options]="slidesOptions">
+<ion-footer [ngClass]="fixedBlocks()> 0 ? 'hidden' : null" class="ion-no-border">
+  <ion-toolbar class="ion-no-margin ion-padding-vertical" color="primary">
+    <ion-slides class="opacity-transition" [options]="slidesOptions">
       <ion-slide *ngFor="let option of options">
 
         <div class="container ion-text-left">
